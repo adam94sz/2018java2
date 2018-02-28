@@ -13,34 +13,25 @@ import hu.mik.java2.book.service.BookService;
 import hu.mik.java2.book.service.ServiceUtils;
 
 @WebServlet("/book_details")
-public class BookDetailsServlet extends HttpServlet{
+public class BookDetailsServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
-	
-		
+
 		BookService bookService = ServiceUtils.getBookService();
-		
+
 		Book book;
-		
-		if(req.getParameter("bookId") != null)
-		{
+
+		if (req.getParameter("bookId") != null) {
 			Integer bookId = new Integer(req.getParameter("bookId"));
 			book = bookService.getBookById(bookId);
-		}
-		else
-		{
+		} else {
 			book = null;
 		}
-		
-		req.setAttribute("book",book);
+
+		req.setAttribute("book", book);
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/book_details.jsp");
-		requestDispatcher.forward(req,resp);
+		requestDispatcher.forward(req, resp);
 	}
 
-	
-	
-	
 }

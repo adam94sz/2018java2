@@ -1,8 +1,8 @@
 package hu.mik.java2.book.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import hu.mik.java2.book.bean.Book;
 
@@ -43,7 +43,9 @@ public class BookServiceDummyImpl implements BookService {
 
 	@Override
 	public synchronized List<Book> listBooks() {
-		return bookList;
+		
+		//return this.bookList.stream().sorted(Comparator.comparing(Book::getId)).collect(Collectors.toList());
+		return this.bookList.stream().sorted((id1, id2) -> id1.getId() - id2.getId()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -84,40 +86,11 @@ public class BookServiceDummyImpl implements BookService {
 			bookList.remove(bookToRemove);
 		}
 	}
-	
-	public synchronized void sort()
-	{
-		Book tempBook;
-		for (int i = 0; i < bookList.size(); i++) {
-			for (int j = 0; j < bookList.size()-1; j++) {
-				
-				if(bookList.get(j).getId()>bookList.get(j+1).getId())
-				{
-					tempBook=bookList.get(j);
-					bookList.set(j,bookList.get(j+1));
-					bookList.set(j+1,tempBook);
-			
-				}
-			}
-		}
-	}
-	
-	public synchronized void createFilteredBookList(String feltetel) {
+
+
+	public synchronized List<Book> bookListFiltered(String filterValue) {
 		
-		filteredBookList.clear();
-			
-		for (Book book : bookList) {
-			if(book.getAuthor().toLowerCase().contains(feltetel.toLowerCase()))
-			{
-				filteredBookList.add(book);
-			}
-		}
-		
-	}
-	
-	
-	public synchronized List<Book> bookListFiltered(){
-		return filteredBookList;
+		return this.bookList.stream().filter(f ->f.getAuthor().toLowerCase().contains(filterValue.toLowerCase())).collect(Collectors.toList());
 	}
 
 }

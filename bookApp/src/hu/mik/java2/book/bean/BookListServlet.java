@@ -18,7 +18,6 @@ public class BookListServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BookService bookService = ServiceUtils.getBookService();
-		bookService.sort();
 
 		req.setAttribute("books", bookService.listBooks());
 
@@ -31,24 +30,22 @@ public class BookListServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		req.setCharacterEncoding("UTF-8");
-		
+
 		BookService bookService = ServiceUtils.getBookService();
-		bookService.sort();
 
-		String[] feltetel = req.getParameterValues("szures");
-		bookService.createFilteredBookList(feltetel[0]);
+		String[] filterValue = req.getParameterValues("szures");
 
-		req.setAttribute("books", bookService.bookListFiltered());
+		RequestDispatcher requestDispatcher;
 
-		if (bookService.bookListFiltered().isEmpty()) {
-			RequestDispatcher requestDispatcher = req.getRequestDispatcher("/book_not_found.jsp");
-			requestDispatcher.forward(req, resp);
+		if (bookService.bookListFiltered(filterValue[0]).isEmpty()) {
+			requestDispatcher = req.getRequestDispatcher("/book_not_found.jsp");
 
 		} else {
-
-			RequestDispatcher requestDispatcher = req.getRequestDispatcher("/book_list.jsp");
-			requestDispatcher.forward(req, resp);
+			req.setAttribute("books", bookService.bookListFiltered(filterValue[0]));
+			requestDispatcher = req.getRequestDispatcher("/book_list.jsp");
 		}
+
+		requestDispatcher.forward(req, resp);
 
 	}
 

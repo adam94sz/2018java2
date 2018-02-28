@@ -16,11 +16,7 @@ public interface BookService {
 	
 	public void deleteBook(Book book);
 	
-	public void sort();
-	
-	public void createFilteredBookList(String feltetel);
-	
-	public List<Book> bookListFiltered();
+	public List<Book> bookListFiltered(String filterValue);
 	
 	
 }
